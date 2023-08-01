@@ -1,0 +1,43 @@
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+        <span class="fs-4">To Do List</span>
+      </a>
+    
+     
+      <ul class="nav nav-pills">
+        <li class="nav-item"><a href="/create" class="nav-link">Create New List</a></li>
+        
+      </ul>
+     
+      <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  TASK LISTS
+              </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <% for( let i = 0; i < listTitles.length; i++ ) { %>
+            <li><a class="dropdown-item" href=<%=  "/"+ listRoute[i] %>><%= listTitles[i] %></a></li>
+          <% } %>
+                        
+        </ul>
+      </div>
+   
+    
+    </header>
+<% function checkFlag() {
+    var titleList="";
+    if (locals.flagWork) {
+        titleList= "Work List";
+    }else{
+        titleList= monthPresent+" "+new Date().getDate()+", "+dayPresent;
+    }
+    return titleList;
+} %>
+ 
+<div class="container">
+    <h1 class="display-4 fw-normal text-body-emphasis"><%= checkFlag();%></h1>
+</div>
+   
+  </div>
+

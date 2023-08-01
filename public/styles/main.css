@@ -1,0 +1,89 @@
+.form-check-input:checked[type=checkbox] {
+    --bs-form-check-bg-image: url(data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e);
+}
+.list-group-radio .form-check-input {
+    z-index: 2;
+    margin-top: -0.5em;
+}
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+.form-check-input[type=checkbox] {
+    border-radius: 50%;
+}
+.fs-5 {
+    font-size: 1.25rem!important;
+}
+.me-3 {
+    margin-right: 1rem!important;
+}
+.end-0 {
+    right: 0!important;
+}
+.top-50 {
+    top: 50%!important;
+}
+.position-absolute {
+    position: absolute!important;
+}
+
+.list-group {
+    width: 100%;
+    max-width: 460px;
+    margin-inline: 1.5rem;
+  }
+  
+  .form-check-input:checked + .form-checked-content {
+    opacity: .5;
+  }
+  
+  .form-check-input-placeholder {
+    border-style: dashed;
+  }
+  [contenteditable]:focus {
+    outline: 0;
+  }
+  
+  .list-group-checkable .list-group-item {
+    cursor: pointer;
+  }
+  .list-group-item-check {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+  }
+  .list-group-item-check:hover + .list-group-item {
+    background-color: var(--bs-secondary-bg);
+  }
+  .list-group-item-check:checked + .list-group-item {
+    color: #fff;
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+  }
+  .list-group-item-check[disabled] + .list-group-item,
+  .list-group-item-check:disabled + .list-group-item {
+    pointer-events: none;
+    filter: none;
+    opacity: .5;
+  }
+  
+  .list-group-radio .list-group-item {
+    cursor: pointer;
+    border-radius: .5rem;
+  }
+  .list-group-radio .form-check-input {
+    z-index: 2;
+    margin-top: -.5em;
+  }
+  .list-group-radio .list-group-item:hover,
+  .list-group-radio .list-group-item:focus {
+    background-color: var(--bs-secondary-bg);
+  }
+  
+  .list-group-radio .form-check-input:checked + .list-group-item {
+    background-color: var(--bs-body);
+    border-color: var(--bs-primary);
+    box-shadow: 0 0 0 2px var(--bs-primary);
+  }
+ 
+  
