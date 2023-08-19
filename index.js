@@ -1,6 +1,7 @@
 import Express  from "express";
 import bodyParser from "body-parser";
-
+import mongoose from "mongoose";
+import _ from "lodash";
 
 function dayToday() {
     var whatDay= new Date().getDay();
@@ -66,6 +67,51 @@ function monthToday() {
  return whatMonth
 } 
 
+
+var itemsinDB=[];
+
+const itemSchema = ({
+    name: {
+        type: String,
+     require: true 
+    }   
+    });
+const Item = mongoose.model('Item', itemSchema);
+
+const listSchema=({
+    name: String,
+    items: [itemSchema]
+});
+
+const List=mongoose.model("List", listSchema);
+
+  const item1= new Item({
+    name:"First"  
+  });
+  const item2= new Item({
+   name:"Second"
+  });
+  const item3= new Item({
+   name:"Third"
+  });
+
+  const defaultItems=[item1, item2, item3];
+
+
+  main().catch(err => console.log(err));
+
+async function main() {
+  await mongoose.connect('mongodb://127.0.0.1:27017/todolistDB');
+
+    
+
+    if(itemsinDB==0){
+    //    Item.insertMany(defaultItems);
+       }        
+
+}
+
+  
 const app=Express();
 const port=3000; 
 var tasklength=0;
@@ -81,42 +127,87 @@ var listRoute=["", "work"]
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(Express.static("public"));
 
-app.get("/create", (req,res)=>{
-    res.render("create.ejs",{listRoute: listRoute,listTitles: listTitles, taskList: tasklength, taskPrompt: taskNumber, dayPresent: dayToday(), monthPresent: monthToday(),});
+
+
+app.get("/",async (req,res)=>{
+
+        
+    const itemsinDB= await Item.find({});
+    itemsinDB.forEach(item => {
+        console.log(item);    
+    });
+
+    res.render("index.ejs",{itemsinDB: itemsinDB, listTitle: dayToday(), monthPresent: monthToday(),});
 })
 
-app.get("/", (req,res)=>{
-    res.render("index.ejs",{listRoute: listRoute, listTitles: listTitles, taskList: tasklength, taskPrompt: taskNumber, dayPresent: dayToday(), monthPresent: monthToday(),});
-})
+app.post("/", async (req,res)=>{
 
-app.post("/", (req,res)=>{
+    const itemName=req.body.newTask;
+    const listName=req.body.list;
     if(req.body.newTask!=""){
-    taskNumber[tasklength]= req.body.newTask;    
-    tasklength++;
-    res.render("index.ejs",{listRoute: listRoute, listTitles: listTitles, taskList: tasklength, taskPrompt: taskNumber, dayPresent: dayToday(), monthPresent: monthToday(),});
-    } else{
-        res.render("index.ejs",{listRoute: listRoute, listTitles: listTitles, taskList: tasklength, taskPrompt: taskNumber, dayPresent: dayToday(), monthPresent: monthToday(),});
-    }   
+    const newItem=new Item({
+        name: req.body.newTask
+    });
+    if (listName==dayToday()){
+        newItem.save();
+        res.redirect("/");
+    } else {
+        const pushNewItem= await List.findOne({name: listName})
+        pushNewItem.items.push(newItem);
+        pushNewItem.save();
+        res.redirect("/"+listName);
+    }
+
+    }
+
+  
 })
 
-app.get("/work", (req,res)=>{
+app.post("/delete",async (req,res)=>{
+    const listName = req.body.listName;
+    console.log(req.body.checkbox);
+    const checkId=req.body.checkbox;
+    if(listName==dayToday()){
+        const deleted =await Item.findByIdAndRemove(checkId);
+        console.log(deleted);
+        res.redirect("/");
 
-    res.render("index.ejs",{flagWork:flagWork, listRoute: listRoute, listTitles: listTitles, flagWork: flagWork ,taskList: worklength, taskPrompt: workNumber, dayPresent: dayToday(), monthPresent: monthToday(),});   
-})
-
-app.post("/work", (req,res)=>{
-
-    if(req.body.newTask!=null){
-    workNumber[worklength] = req.body.newTask;    
-    worklength++;
-    var month=monthToday();
-    res.render("index.ejs",{flagWork: flagWork, listRoute: listRoute, listTitles: listTitles, taskList: worklength, taskPrompt: workNumber, dayPresent: dayToday(), monthPresent: monthToday(),});
-    } else{
-        res.render("index.ejs",{flagWork: flagWork, listRoute: listRoute, listTitles: listTitles, taskList: worklength, taskPrompt: workNumber, dayPresent: dayToday(), monthPresent: monthToday(),});
+    }else{
+        await List.findOneAndUpdate({name: listName},{$pull:{items: {_id: checkId}}}); 
+        res.redirect("/"+listName);
     }
     
 })
 
+app.get("/:Lists",async (req,res)=>{
+   const newList = _.capitalize(req.params.Lists);
+   console.log(newList);
+   const checkOne=await List.findOne({name: newList});
+   if(!checkOne){
+       const list= new List ({
+        name: newList,
+        items: defaultItems
+        });   
+        list.save();
+        console.log("created new list");
+        res.redirect("/"+newList);
+    } else {
+        res.render("index.ejs",{ listTitle: checkOne.name, itemsinDB: checkOne.items})
+        console.log("list already exists");       
+    }
+})
+
+
+
 app.listen(port,()=>{
     console.log("server is runnign on port "+port);
 })
+
+
+  
+  
+
+
+
+  
+    

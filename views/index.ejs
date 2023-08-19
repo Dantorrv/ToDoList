@@ -14,36 +14,30 @@
     <div class="d-flex flex-column flex-md-row p-4 gap-4 py-md-5 align-items-center justify-content-center">
         <div class="list-group list-group-radio d-grid gap-2 border-0">
       
-          <% for( let i = 0; i < taskList; i++ ) { %>
-          
-            <div class="position-relative">
-              <input class="form-check-input position-absolute top-50 end-0 me-3 fs-5" type="checkbox" name="listGroupRadioGrid" id="listGroupRadioGrid<% i %>" value="" unchecked="">
+          <% var count=0; itemsinDB.forEach(item => {%>
+          <form action="/delete" method="post">
+            <div class="position-relative">             
+              <input onchange="this.form.submit()" class="form-check-input position-absolute top-50 end-0 me-3 fs-5" type="checkbox" name="checkbox" id="listGroupRadioGrid<% count++ %>" value="<%= item._id %>">
               <label class="list-group-item py-3 pe-5" for="listGroupRadioGrid1">
-                <strong class="fw-semibold">Task #<%= i+1 %></strong>
-                <span class="d-block small opacity-75"><%= taskPrompt[i] %></span>
-              </label>
+                <strong class="fw-semibold">Task #<%= count %></strong>
+                <span class="d-block small opacity-75"><%= item.name %></span>
+              </label>           
             </div>
-      
-          <% } %>
+            <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+          </form>
+          <%}); %>
+          
            
         </div>
       </div>
-      <% function checkFlag() {
-        var page="";
-        if (locals.flagWork) {
-            page= "/work";
-        }else{
-            page= "/";
-        }
-        return page;
-    } %>
+
      
-      <div class="container">
-    <form action=<%= checkFlag(); %> method="POST">
+  <div class="container">
+    <form action="/" method="POST">
       <div class="d-flex justify-content-center">
     
           <input class="form-control w-50" type="text" placeholder="New Task" name="newTask">
-          <input class="btn btn-primary" type="submit" value="Post new task">
+          <input class="btn btn-primary" type="submit" value="<%= listTitle %>" name="list">
     
       </div>
     </form>

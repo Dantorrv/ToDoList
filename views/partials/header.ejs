@@ -16,8 +16,8 @@
                   TASK LISTS
               </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <% for( let i = 0; i < listTitles.length; i++ ) { %>
-            <li><a class="dropdown-item" href=<%=  "/"+ listRoute[i] %>><%= listTitles[i] %></a></li>
+          <% for( let i = 0; i < 0; i++ ) { %>
+            <li><a class="dropdown-item" href=<%=  "/"%>><%= %></a></li>
           <% } %>
                         
         </ul>
@@ -27,10 +27,10 @@
     </header>
 <% function checkFlag() {
     var titleList="";
-    if (locals.flagWork) {
-        titleList= "Work List";
+    if (locals.monthPresent) {
+        titleList=monthPresent+" "+new Date().getDate()+", "+listTitle;
     }else{
-        titleList= monthPresent+" "+new Date().getDate()+", "+dayPresent;
+        titleList= listTitle;
     }
     return titleList;
 } %>
