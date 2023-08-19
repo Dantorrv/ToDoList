@@ -101,14 +101,7 @@ const List=mongoose.model("List", listSchema);
   main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/todolistDB');
-
-    
-
-    if(itemsinDB==0){
-    //    Item.insertMany(defaultItems);
-       }        
-
+  await mongoose.connect('mongodb+srv://dantor:8RE0ps05hx5I7mQD@cluster0.febnxvi.mongodb.net/todolistDB');
 }
 
   
