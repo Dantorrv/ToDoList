@@ -67,9 +67,6 @@ function monthToday() {
  return whatMonth
 } 
 
-
-var itemsinDB=[];
-
 const itemSchema = ({
     name: {
         type: String,
@@ -104,27 +101,14 @@ async function main() {
   await mongoose.connect('mongodb+srv://dantor:8RE0ps05hx5I7mQD@cluster0.febnxvi.mongodb.net/todolistDB');
 }
 
-  
 const app=Express();
 const port=3000; 
-var tasklength=0;
-var taskNumber=[];
-var worklength=0;
-var workNumber=[];
-var flagWork=1;
-
-
-var listTitles=["Today", "Work"]
-var listRoute=["", "work"]
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(Express.static("public"));
 
-
-
 app.get("/",async (req,res)=>{
-
-        
+    
     const itemsinDB= await Item.find({});
     itemsinDB.forEach(item => {
         console.log(item);    
@@ -150,10 +134,7 @@ app.post("/", async (req,res)=>{
         pushNewItem.save();
         res.redirect("/"+listName);
     }
-
-    }
-
-  
+    }  
 })
 
 app.post("/delete",async (req,res)=>{
@@ -168,8 +149,7 @@ app.post("/delete",async (req,res)=>{
     }else{
         await List.findOneAndUpdate({name: listName},{$pull:{items: {_id: checkId}}}); 
         res.redirect("/"+listName);
-    }
-    
+    }  
 })
 
 app.get("/:Lists",async (req,res)=>{
