@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import Express  from "express";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
@@ -98,7 +99,7 @@ const List=mongoose.model("List", listSchema);
   main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb+srv://dantor:8RE0ps05hx5I7mQD@cluster0.febnxvi.mongodb.net/todolistDB');
+  await mongoose.connect(process.env.AUTHDB);
 }
 
 const app=Express();
